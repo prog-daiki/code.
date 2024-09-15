@@ -13,6 +13,9 @@ export const HeaderNav = () => {
       <Link href="/pricing">
         <Button variant="ghost">Pricing</Button>
       </Link>
+      <Link href="/dashboard">
+        <Button variant="ghost">Dashboard</Button>
+      </Link>
     </nav>
   );
 };
