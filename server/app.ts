@@ -1,12 +1,44 @@
+import { clerkMiddleware } from "@hono/clerk-auth";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { csrf } from "hono/csrf";
 import { logger } from "hono/logger";
+import Category from "./src/core/categories";
 
-const app = new Hono();
+export type Env = {
+  DATABASE_URL: string;
+  ADMIN_USER_ID: string;
+  MUX_TOKEN_ID: string;
+  MUX_TOKEN_SECRET: string;
+  STRIPE_API_KEY: string;
+  STRIPE_WEBHOOK_SECRET: string;
+};
+
+const app = new Hono<{ Bindings: Env }>();
+
+app.use(
+  "*",
+  cors({
+    origin: ["http://localhost:3000"],
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use("*", logger());
 
-app.get("/test", (c) => {
-  return c.json({ message: "hello from hono" });
-});
+// CSRF対策を追加
+app.use(
+  "/api/*",
+  csrf({
+    origin: "http://localhost:3000",
+  })
+);
+
+app.use("*", clerkMiddleware());
+
+const apiRoutes = app.route("/api/categories", Category);
 
 export default app;
+export type ApiRoutes = typeof apiRoutes;
