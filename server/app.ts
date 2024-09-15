@@ -23,20 +23,17 @@ app.use(
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-  })
+  }),
+  logger(),
+  clerkMiddleware()
 );
 
-app.use("*", logger());
-
-// CSRF対策を追加
 app.use(
   "/api/*",
   csrf({
     origin: "http://localhost:3000",
   })
 );
-
-app.use("*", clerkMiddleware());
 
 const apiRoutes = app.route("/api/categories", Category);
 
