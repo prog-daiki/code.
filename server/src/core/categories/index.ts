@@ -9,23 +9,22 @@ const Category = new Hono<{
   Variables: {
     categoryUseCase: CategoryUseCase;
   };
-}>();
-Category.use("*", async (c, next) => {
-  c.set("categoryUseCase", new CategoryUseCase());
-  await next();
-});
-
-/**
- * カテゴリー一覧取得API
- */
-Category.get("/", validateAuth, async (c) => {
-  const categoryUseCase = c.get("categoryUseCase");
-  try {
-    const categories = await categoryUseCase.getCategories();
-    return c.json(categories);
-  } catch (error) {
-    return HandleError(c, error, "カテゴリー一覧取得エラー");
-  }
-});
+}>()
+  .use("*", async (c, next) => {
+    c.set("categoryUseCase", new CategoryUseCase());
+    await next();
+  })
+  /**
+   * カテゴリー一覧取得API
+   */
+  .get("/", validateAuth, async (c) => {
+    const categoryUseCase = c.get("categoryUseCase");
+    try {
+      const categories = await categoryUseCase.getCategories();
+      return c.json(categories);
+    } catch (error) {
+      return HandleError(c, error, "カテゴリー一覧取得エラー");
+    }
+  });
 
 export default Category;

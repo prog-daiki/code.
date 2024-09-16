@@ -38,4 +38,4 @@ app.use(
 const apiRoutes = app.route("/api/categories", Category);
 
 export default app;
-export type ApiRoutes = typeof apiRoutes;
+export type AppType = typeof apiRoutes;
