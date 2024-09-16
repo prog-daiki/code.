@@ -1,5 +1,5 @@
 import { SearchInput } from "@/components/search-input";
-import { Categories } from "@/features/categories/components/categories";
+import { Categories } from "@/features/category/components/categories";
 
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
