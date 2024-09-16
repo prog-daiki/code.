@@ -1,20 +1,30 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
 
 export const HeaderNav = () => {
+  const pathname = usePathname();
+  const isActive = (path: string) => pathname === path;
+
   return (
     <nav className="flex space-x-4 text-muted-foreground text-sm">
       <Link href="/courses">
-        <Button variant="ghost">Courses</Button>
-      </Link>
-      <Link href="/articles">
-        <Button variant="ghost">Articles</Button>
-      </Link>
-      <Link href="/pricing">
-        <Button variant="ghost">Pricing</Button>
+        <Button
+          variant="ghost"
+          className={isActive("/courses") ? "bg-gray-100" : ""}
+        >
+          Courses
+        </Button>
       </Link>
       <Link href="/dashboard">
-        <Button variant="ghost">Dashboard</Button>
+        <Button
+          variant="ghost"
+          className={isActive("/dashboard") ? "bg-gray-100" : ""}
+        >
+          Dashboard
+        </Button>
       </Link>
     </nav>
   );
