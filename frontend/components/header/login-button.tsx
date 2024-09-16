@@ -13,14 +13,14 @@ export const LoginButton = () => {
   return (
     <>
       <ClerkLoading>
-        <Loader2 className="size-4 animate-spin text-muted-foreground" />
+        <Loader2 className="size-10 animate-spin text-muted-foreground" />
       </ClerkLoading>
       <ClerkLoaded>
         <SignedIn>
-          <UserButton afterSignOutUrl="/" />
+          <UserButton />
         </SignedIn>
         <SignedOut>
-          <SignInButton forceRedirectUrl="/home" mode="modal">
+          <SignInButton forceRedirectUrl="/courses" mode="modal">
             <Button className="flex items-center gap-2" variant="outline">
               <LogInIcon className="text-muted-foreground" size={16} />
               Login
