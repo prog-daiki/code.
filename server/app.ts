@@ -3,7 +3,8 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { csrf } from "hono/csrf";
 import { logger } from "hono/logger";
-import Category from "./src/core/categories";
+import Category from "./src/core/category";
+import Course from "./src/core/courses";
 
 export type Env = {
   DATABASE_URL: string;
@@ -35,7 +36,9 @@ app.use(
   })
 );
 
-const apiRoutes = app.route("/api/categories", Category);
+const apiRoutes = app
+  .route("/api/categories", Category)
+  .route("/api/courses", Course);
 
 export default app;
 export type AppType = typeof apiRoutes;
