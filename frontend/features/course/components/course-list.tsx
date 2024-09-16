@@ -1,0 +1,59 @@
+"use client";
+
+import { Skeleton } from "@/components/ui/skeleton";
+import { useGetPublishCourses } from "../api/use-get-publish-courses";
+import { CourseCard } from "./course-card";
+
+type CourseListProps = {
+  searchParams: {
+    title: string;
+    categoryId: string;
+  };
+};
+
+export const CourseList = ({ searchParams }: CourseListProps) => {
+  const coursesQuery = useGetPublishCourses({
+    title: searchParams.title,
+    categoryId: searchParams.categoryId,
+  });
+  const courses = coursesQuery.data || [];
+
+  if (coursesQuery.isLoading) {
+    return (
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
+        {courses.map((course) => (
+          <CourseCard
+            category={course.category!.name}
+            chaptersLength={course.chapters.length}
+            id={course.course.id}
+            imageUrl={course.course.imageUrl!}
+            key={course.course.id}
+            price={course.course.price!}
+            title={course.course.title}
+            purchased={course.purchased}
+          />
+        ))}
+      </div>
+      {courses.length === 0 && (
+        <div className="mt-10 text-center text-sm text-muted-foreground">
+          講座が見つかりませんでした
+        </div>
+      )}
+    </div>
+  );
+};
