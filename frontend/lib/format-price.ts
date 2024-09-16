@@ -10,7 +10,12 @@ const formatter = new Intl.NumberFormat("ja-JP", {
  * @throws 無効な価格の場合はエラーをスローする
  */
 export const formatPrice = (price: number): string => {
-  if (typeof price !== "number" || isNaN(price)) {
+  if (
+    typeof price !== "number" ||
+    isNaN(price) ||
+    price < 0 ||
+    price === Infinity
+  ) {
     throw new Error("無効な価格です。数値を入力してください。");
   }
   return formatter.format(price);
