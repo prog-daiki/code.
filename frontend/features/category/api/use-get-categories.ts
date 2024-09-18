@@ -1,35 +1,51 @@
 import { client } from "@/lib/hono";
 import { useAuth } from "@clerk/nextjs";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { Category } from "../types";
 
 /**
- * カテゴリーの一覧を取得する
- * @returns カテゴリーの一覧
- * @throws Error カテゴリー取得に失敗した場合
+ * カテゴリーの一覧を取得するカスタムフック
+ * @returns カテゴリーの一覧を取得するクエリ結果
  */
-export const useGetCategories = () => {
+export const useGetCategories = (): UseQueryResult<Category[], Error> => {
   const { getToken } = useAuth();
-  const query = useQuery({
+
+  return useQuery<Category[], Error>({
     queryKey: ["categories"],
     queryFn: async () => {
       const token = await getToken();
-      const response = await client().api.categories.$get(
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("カテゴリーの一覧取得に失敗しました");
+      if (!token) {
+        throw new Error("認証トークンの取得に失敗しました");
       }
 
-      const data = await response.json();
-      return data;
+      const response = await fetchCategories(token);
+      return response;
     },
   });
-
-  return query;
 };
+
+/**
+ * カテゴリーの一覧を取得する関数
+ * @param token 認証トークン
+ * @returns カテゴリーの一覧
+ * @throws Error カテゴリー取得に失敗した場合
+ */
+async function fetchCategories(token: string): Promise<Category[]> {
+  const response = await client().api.categories.$get(
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `カテゴリーの一覧取得に失敗しました: ${response.statusText}`
+    );
+  }
+
+  const data: Category[] = await response.json();
+  return data;
+}
