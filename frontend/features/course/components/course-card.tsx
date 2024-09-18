@@ -2,7 +2,7 @@ import { BookOpen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { formatPrice } from "@/lib/format-price";
+import { formatJapaneseYen } from "@/lib/format-price";
 
 interface Props {
   id: string;
@@ -49,7 +49,7 @@ export const CourseCard = ({
             </div>
           </div>
           <p className="text-md font-semibold text-slate-700 md:text-sm">
-            {purchased ? "購入済み" : formatPrice(price)}
+            {purchased ? "購入済み" : formatJapaneseYen(price)}
           </p>
         </div>
       </div>

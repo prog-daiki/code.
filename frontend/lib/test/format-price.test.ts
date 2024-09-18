@@ -1,50 +1,45 @@
-import { formatPrice } from "../format-price";
+import { formatJapaneseYen } from "../format-price";
 
-describe("formatPrice", () => {
-  /**
-   * (1) 正の整数を正しくフォーマットする
-   */
-  it("正の整数を正しくフォーマットする", () => {
-    expect(formatPrice(1000)).toBe("¥1,000");
-    expect(formatPrice(1234567)).toBe("¥1,234,567");
+describe("formatJapaneseYen", () => {
+  test("正の整数を正しくフォーマットする", () => {
+    expect(formatJapaneseYen(1000)).toBe("¥1,000");
+    expect(formatJapaneseYen(1234567)).toBe("¥1,234,567");
   });
 
-  /**
-   * (2) 小数点以下の金額を正しくフォーマットする
-   */
-  it("小数点以下の金額を正しくフォーマットする", () => {
-    expect(formatPrice(1000.5)).toBe("¥1,001");
-    expect(formatPrice(1234.56)).toBe("¥1,235");
+  test("小数点以下の金額を正しくフォーマットする", () => {
+    expect(formatJapaneseYen(1000.5)).toBe("¥1,001");
+    expect(formatJapaneseYen(1234.56)).toBe("¥1,235");
   });
 
-  /**
-   * (3) 0をフォーマットする
-   */
-  it("0をフォーマットする", () => {
-    expect(formatPrice(0)).toBe("¥0");
+  test("0を正しくフォーマットする", () => {
+    expect(formatJapaneseYen(0)).toBe("¥0");
   });
 
-  /**
-   * (4) 負の数に対してエラーをスローする
-   */
-  it("負の数に対してエラーをスローする", () => {
-    expect(() => formatPrice(-1000)).toThrow(
-      "無効な価格です。数値を入力してください。"
-    );
-    expect(() => formatPrice(-1234.56)).toThrow(
-      "無効な価格です。数値を入力してください。"
+  test("大きな数値を正しくフォーマットする", () => {
+    expect(formatJapaneseYen(1000000000)).toBe("¥1,000,000,000");
+  });
+
+  test("負の数値でエラーをスローする", () => {
+    expect(() => formatJapaneseYen(-1000)).toThrow(
+      "無効な価格です。正の数値を入力してください。"
     );
   });
 
-  /**
-   * (5) 無効な入力に対してエラーをスローする
-   */
-  it("無効な入力に対してエラーをスローする", () => {
-    expect(() => formatPrice(NaN)).toThrow(
-      "無効な価格です。数値を入力してください。"
+  test("NaNでエラーをスローする", () => {
+    expect(() => formatJapaneseYen(NaN)).toThrow(
+      "無効な価格です。正の数値を入力してください。"
     );
-    expect(() => formatPrice(Infinity)).toThrow(
-      "無効な価格です。数値を入力してください。"
+  });
+
+  test("Infinityでエラーをスローする", () => {
+    expect(() => formatJapaneseYen(Infinity)).toThrow(
+      "無効な価格です。正の数値を入力してください。"
+    );
+  });
+
+  test("文字列型の数値でエラーをスローする", () => {
+    expect(() => formatJapaneseYen("1000" as any)).toThrow(
+      "無効な価格です。正の数値を入力してください。"
     );
   });
 });
