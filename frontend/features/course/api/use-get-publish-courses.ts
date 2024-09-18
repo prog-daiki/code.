@@ -14,7 +14,7 @@ export const useGetPublishCourses = ({
     queryKey: ["courses", title, categoryId],
     queryFn: async () => {
       const token = await getToken();
-      const response = await client.api.courses.publish.$get(
+      const response = await client().api.courses.publish.$get(
         {
           query: {
             title,

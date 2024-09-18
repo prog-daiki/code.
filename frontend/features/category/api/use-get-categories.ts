@@ -13,7 +13,7 @@ export const useGetCategories = () => {
     queryKey: ["categories"],
     queryFn: async () => {
       const token = await getToken();
-      const response = await client.api.categories.$get(
+      const response = await client().api.categories.$get(
         {},
         {
           headers: {
